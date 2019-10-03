@@ -1,13 +1,14 @@
 package com.thoughtworks.carparktest;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ParkingLotTest {
     @Test
-    void givenSpaceAvailable_WhenPark_ThenShouldPark(){
-        ParkingLot parkingLot = new ParkingLot();
+    void givenParkingLotHasCapacity_WhenPark_ThenShouldPark() {
+        ParkingLot parkingLot = new ParkingLot(1);
 
-        Assertions.assertTrue(parkingLot.park(new Object()));
+        assertTrue(parkingLot.park(new Object()));
     }
 }
