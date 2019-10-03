@@ -36,7 +36,10 @@ public class ParkingLot {
                 '}';
     }
 
-    public boolean unPark(Object car) {
-        return true;
+    public boolean unPark(Object car) throws ParkingLotException {
+        if(vehicles.contains(car)){
+            return true;
+        }
+        throw new ParkingLotException("the car may not be parked here");
     }
 }

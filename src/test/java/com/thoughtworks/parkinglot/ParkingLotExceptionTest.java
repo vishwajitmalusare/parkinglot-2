@@ -50,4 +50,16 @@ public class ParkingLotExceptionTest {
         assertTrue(parkingLot.unPark(alreadyParkedCar));
     }
 
+    @Test
+    void givenCarWhichIsNotParkedIn_WhenUnPark_thenShouldBeNotAbleToUnPark() throws ParkingLotException {
+        ParkingLot parkingLot = new ParkingLot(2);
+        Object CarWhichIsNotParkedIn = new Object();
+
+        ParkingLotException exception = assertThrows(ParkingLotException.class, () -> {
+            parkingLot.unPark(CarWhichIsNotParkedIn);
+        });
+
+        assertEquals("the car may not be parked here", exception.getMessage());
+    }
+
 }
