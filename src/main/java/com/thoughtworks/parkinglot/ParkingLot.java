@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ParkingLot {
 
-    private final int capacity;
+    private int capacity;
     private int spaceAvailable;
     List<Object> vehicles = new ArrayList<>();
 
@@ -34,5 +34,9 @@ public class ParkingLot {
         return "ParkingLot{" +
                 "capacity=" + capacity +
                 '}';
+    }
+
+    public boolean unPark(Object car) {
+        return true;
     }
 }

@@ -3,19 +3,20 @@ package com.thoughtworks.parkinglot;
 import com.thoughtworks.ParkingLotException;
 import org.junit.jupiter.api.Test;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ParkingLotExceptionTest {
     @Test
     void givenParkingLotHasCapacity_WhenPark_ThenShouldPark() throws ParkingLotException {
-        com.thoughtworks.parkinglot.ParkingLot parkingLot = new com.thoughtworks.parkinglot.ParkingLot(1); //this represent available lots
+        ParkingLot parkingLot = new ParkingLot(1); //this represent available lots
 
         assertTrue(parkingLot.park(new Object()));
     }
 
     @Test
     void givenParkingLotIsFull_WhenPark_ThenShouldNotPark() throws ParkingLotException {
-        com.thoughtworks.parkinglot.ParkingLot parkingLot = new com.thoughtworks.parkinglot.ParkingLot(1); // spaceAvailable = 1
+        ParkingLot parkingLot = new ParkingLot(1); // spaceAvailable = 1
         parkingLot.park(new Object()); // spaceAvailable - -
 
         //assertFalse(parkingLot.park(new Object()));
@@ -24,12 +25,12 @@ public class ParkingLotExceptionTest {
             parkingLot.park(new Object());
 
         });
-        assertEquals( "parking lot is full", exception.getMessage());
+        assertEquals("parking lot is full", exception.getMessage());
     }
 
     @Test
     void givenParkingSameObject_WhenPark_ThenShouldNotPark() throws ParkingLotException {
-        com.thoughtworks.parkinglot.ParkingLot parkingLot = new com.thoughtworks.parkinglot.ParkingLot(2);
+        ParkingLot parkingLot = new ParkingLot(2);
 
         Object object = new Object();
         parkingLot.park(object);
@@ -37,6 +38,16 @@ public class ParkingLotExceptionTest {
             parkingLot.park(object);
 
         });
-        assertEquals( "You cannot park same vehicle", exception.getMessage());
+        assertEquals("You cannot park same vehicle", exception.getMessage());
     }
+
+    @Test
+    void givenAlreadyParkedCar_WhenUnPark_thenShouldBeAbleToUnPark() throws ParkingLotException {
+        ParkingLot parkingLot = new ParkingLot(2);
+        Object alreadyParkedCar = new Object();
+        parkingLot.park(alreadyParkedCar);
+
+        assertTrue(parkingLot.unPark(alreadyParkedCar));
+    }
+
 }
