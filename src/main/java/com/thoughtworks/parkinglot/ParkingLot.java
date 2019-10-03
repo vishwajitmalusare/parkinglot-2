@@ -1,4 +1,6 @@
-package com.thoughtworks.carparktest;
+package com.thoughtworks.parkinglot;
+
+import com.thoughtworks.ParkingLotException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,21 +11,21 @@ public class ParkingLot {
     private int spaceAvailable;
     List<Object> vehicles = new ArrayList<>();
 
-    ParkingLot(int capacity) {
+    public ParkingLot(int capacity) {
         this.capacity = capacity;
         this.spaceAvailable = capacity;
     }
 
-    public boolean park(Object object) {
+    public boolean park(Object object) throws ParkingLotException {
         if (spaceAvailable > 0) {
             if (vehicles.contains(object)) {
-                return false;
+                throw new ParkingLotException("You cannot park same vehicle");
             }
             vehicles.add(object);
             spaceAvailable--;
             return true;
         }
-        return false;
+        throw new ParkingLotException("parking lot is full");
     }
 
 
