@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ParkingLotTest {
     @Test
     void givenParkingLotHasCapacity_WhenPark_ThenShouldPark() {
-        ParkingLot parkingLot = new ParkingLot(1 ); //this represent available lots
+        ParkingLot parkingLot = new ParkingLot(1); //this represent available lots
 
         assertTrue(parkingLot.park(new Object()));
     }
@@ -15,8 +15,19 @@ public class ParkingLotTest {
     @Test
     void givenParkingLotIsFull_WhenPark_ThenShouldNotPark() {
         ParkingLot parkingLot = new ParkingLot(1); // spaceAvailable = 1
-        parkingLot.park(new Object()); // spaceAvailable--
+        parkingLot.park(new Object()); // spaceAvailable - -
 
         assertFalse(parkingLot.park(new Object()));
     }
+
+    @Test
+    void givenParkingSameObject_WhenPark_ThenShouldNotPark() {
+        ParkingLot parkingLot = new ParkingLot(2);
+
+        Object object = new Object();
+        parkingLot.park(object);
+        assertFalse(parkingLot.park(object));
+    }
+
+
 }
