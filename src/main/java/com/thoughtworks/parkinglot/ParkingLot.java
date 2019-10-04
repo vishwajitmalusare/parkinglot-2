@@ -2,7 +2,7 @@ package com.thoughtworks.parkinglot;
 
 import com.thoughtworks.ParkingLotFullException;
 import com.thoughtworks.ParkingLotSameCarException;
-import com.thoughtworks.ParkingLotVehicalNotParkException;
+import com.thoughtworks.ParkingLotVehicleNotParkException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,15 +38,11 @@ public class ParkingLot {
                 '}';
     }
 
-    public boolean unPark(Object car) throws ParkingLotVehicalNotParkException {
-        if (vehicles.contains(car)) {
-            vehicles.remove(car);
-            return true;
+    public Object unPark(Object object) throws ParkingLotVehicleNotParkException {
+        if (vehicles.contains(object)) {
+            vehicles.remove(object);
+            return object;
         }
-        if(vehicles.isEmpty()){
-            throw new ParkingLotVehicalNotParkException("the parking lot has no car");
-        }
-        throw new ParkingLotVehicalNotParkException("the car may not be parked here");
+        throw new ParkingLotVehicleNotParkException("Vehicle not parked, unable to un-park");
     }
-
 }

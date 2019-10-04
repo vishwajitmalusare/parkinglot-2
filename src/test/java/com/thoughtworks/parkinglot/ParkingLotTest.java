@@ -2,31 +2,31 @@ package com.thoughtworks.parkinglot;
 
 import com.thoughtworks.ParkingLotFullException;
 import com.thoughtworks.ParkingLotSameCarException;
+import com.thoughtworks.ParkingLotVehicleNotParkException;
 import org.junit.jupiter.api.Test;
 
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ParkingLotSameCarExceptionTest {
+public class ParkingLotTest {
     @Test
     void givenParkingLotHasCapacity_WhenPark_ThenShouldPark() throws ParkingLotSameCarException, ParkingLotFullException {
-        ParkingLot parkingLot = new ParkingLot(1); //this represent available lots
+        ParkingLot parkingLot = new ParkingLot(1);
 
         assertTrue(parkingLot.park(new Object()));
     }
 
     @Test
     void givenParkingLotIsFull_WhenPark_ThenShouldNotPark() throws ParkingLotSameCarException, ParkingLotFullException {
-        ParkingLot parkingLot = new ParkingLot(1); // spaceAvailable = 1
-        parkingLot.park(new Object()); // spaceAvailable - -
-
-        //assertFalse(parkingLot.park(new Object()));
+        ParkingLot parkingLot = new ParkingLot(2);
+       Object object = new Object();
+        parkingLot.park(object);
 
         ParkingLotSameCarException exception = assertThrows(ParkingLotSameCarException.class, () -> {
-            parkingLot.park(new Object());
+            parkingLot.park(object);
 
         });
-        assertEquals("parking lot is full", exception.getMessage());
+        assertEquals("You cannot park same vehicle", exception.getMessage());
     }
 
     @Test
@@ -43,12 +43,12 @@ public class ParkingLotSameCarExceptionTest {
     }
 
     @Test
-    void givenAlreadyParkedCar_WhenUnPark_thenShouldBeAbleToUnPark() throws ParkingLotSameCarException, ParkingLotFullException {
+    void givenAlreadyParkedCar_WhenUnPark_thenShouldBeAbleToUnPark() throws ParkingLotVehicleNotParkException, ParkingLotFullException, ParkingLotSameCarException {
         ParkingLot parkingLot = new ParkingLot(2);
         Object alreadyParkedCar = new Object();
         parkingLot.park(alreadyParkedCar);
 
-        assertTrue(parkingLot.unPark(alreadyParkedCar));
+        assertEquals(alreadyParkedCar,parkingLot.unPark(alreadyParkedCar));
     }
 
     @Test
@@ -58,22 +58,35 @@ public class ParkingLotSameCarExceptionTest {
         Object CarWhichIsParked = new Object();
         parkingLot.park(CarWhichIsParked);
 
-        ParkingLotSameCarException exception = assertThrows(ParkingLotSameCarException.class, () -> {
+         ParkingLotVehicleNotParkException exception = assertThrows(ParkingLotVehicleNotParkException.class, () -> {
             parkingLot.unPark(CarWhichIsNotParkedIn);
         });
 
-        assertEquals("the car may not be parked here", exception.getMessage());
+        assertEquals("Vehicle not parked, unable to un-park", exception.getMessage());
     }
 
     @Test
-    void givenParkingLotIsEmpty_WhenUnPark_thenShouldNotBeAbleToUnPark() throws ParkingLotSameCarException {
-        ParkingLot parkingLot = new ParkingLot(2);
-        Object AnyOtherCar = new Object();
+    void givenParkingLotIsEmpty_WhenUnPark_thenShouldNotBeAbleToUnPark() {
+        ParkingLot parkingLot = new ParkingLot(0);
+        Object vehicle = new Object();
 
-        ParkingLotSameCarException exception = assertThrows(ParkingLotSameCarException.class, () -> {
-            parkingLot.unPark(AnyOtherCar);
+        ParkingLotVehicleNotParkException exception = assertThrows(ParkingLotVehicleNotParkException.class, () -> {
+            parkingLot.unPark(vehicle);
         });
 
-        assertEquals("the parking lot has no car", exception.getMessage());
+        assertEquals("Vehicle not parked, unable to un-park", exception.getMessage());
+    }
+    @Test
+    void givenParkingLotIsFull_WhenUnPark_thenShouldNotBeAbleToUnPark() {
+        ParkingLot parkingLot = new ParkingLot(2);
+        Object vehicleOne = new Object();
+        Object vehicleTWo = new Object();
+        Object vehicleThree = new Object();
+
+        ParkingLotVehicleNotParkException exception = assertThrows(ParkingLotVehicleNotParkException.class, () -> {
+            parkingLot.unPark(vehicleThree);
+        });
+
+        assertEquals("Vehicle not parked, unable to un-park", exception.getMessage());
     }
 }
