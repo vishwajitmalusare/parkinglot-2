@@ -1,6 +1,8 @@
 package com.thoughtworks.parkinglot;
 
-import com.thoughtworks.ParkingLotException;
+import com.thoughtworks.ParkingLotFullException;
+import com.thoughtworks.ParkingLotSameCarException;
+import com.thoughtworks.ParkingLotVehicalNotParkException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,16 +18,16 @@ public class ParkingLot {
         this.spaceAvailable = capacity;
     }
 
-    public boolean park(Object object) throws ParkingLotException {
+    public boolean park(Object object) throws ParkingLotSameCarException, ParkingLotFullException {
         if (spaceAvailable > 0) {
             if (vehicles.contains(object)) {
-                throw new ParkingLotException("You cannot park same vehicle");
+                throw new ParkingLotSameCarException("You cannot park same vehicle");
             }
             vehicles.add(object);
             spaceAvailable--;
             return true;
         }
-        throw new ParkingLotException("parking lot is full");
+        throw new ParkingLotFullException("parking lot is full");
     }
 
 
@@ -36,15 +38,15 @@ public class ParkingLot {
                 '}';
     }
 
-    public boolean unPark(Object car) throws ParkingLotException {
+    public boolean unPark(Object car) throws ParkingLotVehicalNotParkException {
         if (vehicles.contains(car)) {
             vehicles.remove(car);
             return true;
         }
         if(vehicles.isEmpty()){
-            throw new ParkingLotException("the parking lot has no car");
+            throw new ParkingLotVehicalNotParkException("the parking lot has no car");
         }
-        throw new ParkingLotException("the car may not be parked here");
+        throw new ParkingLotVehicalNotParkException("the car may not be parked here");
     }
 
 }
