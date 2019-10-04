@@ -54,6 +54,8 @@ public class ParkingLotExceptionTest {
     void givenCarWhichIsNotParkedIn_WhenUnPark_thenShouldBeNotAbleToUnPark() throws ParkingLotException {
         ParkingLot parkingLot = new ParkingLot(2);
         Object CarWhichIsNotParkedIn = new Object();
+        Object CarWhichIsParked = new Object();
+        parkingLot.park(CarWhichIsParked);
 
         ParkingLotException exception = assertThrows(ParkingLotException.class, () -> {
             parkingLot.unPark(CarWhichIsNotParkedIn);
@@ -62,4 +64,15 @@ public class ParkingLotExceptionTest {
         assertEquals("the car may not be parked here", exception.getMessage());
     }
 
+    @Test
+    void givenParkingLotIsEmpty_WhenUnPark_thenShouldNotBeAbleToUnPark() throws ParkingLotException {
+        ParkingLot parkingLot = new ParkingLot(2);
+        Object AnyOtherCar = new Object();
+
+        ParkingLotException exception = assertThrows(ParkingLotException.class, () -> {
+            parkingLot.unPark(AnyOtherCar);
+        });
+
+        assertEquals("the parking lot has no car", exception.getMessage());
+    }
 }
