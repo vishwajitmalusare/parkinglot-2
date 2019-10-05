@@ -2,9 +2,13 @@ package com.thoughtworks.consumer;
 
 import com.thoughtworks.ParkingLotFullException;
 import com.thoughtworks.ParkingLotSameCarException;
-import com.thoughtworks.parkinglot.*;
+import com.thoughtworks.parkinglot.ParkingLot;
+import com.thoughtworks.parkinglot.ParkingLotAuthority;
 
-public class SanjayScenerioOne {
+import java.util.ArrayList;
+import java.util.List;
+
+public class SanjayScenarioOne {
     public void park(ParkingLot parkingLotOne, ParkingLot parkingLotTwo) {
         Object carOne = new Object();
         Object carTwo = new Object();
@@ -20,8 +24,8 @@ public class SanjayScenerioOne {
     }
 
     public static void main(String[] args) {
-        SanjayScenerioOne sanjayScenerioOne = new SanjayScenerioOne();
-        ParkingLotAuthority owner = null;
-        sanjayScenerioOne.park(new ParkingLot(2, owner), new ParkingLot(3, owner));
+        SanjayScenarioOne sanjayScenarioOne = new SanjayScenarioOne();
+        List<ParkingLotAuthority> owner = new ArrayList<>();
+        sanjayScenarioOne.park(new ParkingLot(2, owner), new ParkingLot(3, owner));
     }
 }

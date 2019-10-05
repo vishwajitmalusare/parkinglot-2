@@ -10,29 +10,30 @@ import java.util.List;
 public class ParkingLot {
 
     private int capacity;
-    private ParkingLotAuthority owner;
+    List<ParkingLotAuthority> observers;
     List<Object> vehicles = new ArrayList<>();
 
-    public ParkingLot(int capacity, ParkingLotAuthority owner) { // TODO - owner is mandatory so null checks should not be required.
+    public ParkingLot(int capacity, List<ParkingLotAuthority> observer) {
         this.capacity = capacity;
-        this.owner = owner;
+        this.observers = observer;
     }
 
-    public boolean park(Object object) throws ParkingLotSameCarException, ParkingLotFullException {
+    public void park(Object object) throws ParkingLotSameCarException, ParkingLotFullException {
 
-        if (capacity > 0) {
-
-            if (isAlreadyParked(object)) {
-                throw new ParkingLotSameCarException();
-            }
-
-            vehicles.add(object);
-            if (isFull(capacity)) {
-                owner.isNotifyParkingLotFull();
-            }
-            return true;
+        if (isAlreadyParked(object)) {
+            throw new ParkingLotSameCarException();
         }
-        throw new ParkingLotFullException();
+
+        if (isFull(capacity)) {
+            throw new ParkingLotFullException();
+        }
+        vehicles.add(object);
+        for (int i = 0; i < observers.size(); i++) {
+            ParkingLotAuthority observer = observers.get(i);
+            if (isFull(capacity)) {
+                observer.isNotifyParkingLotFull();
+            }
+        }
     }
 
     private boolean isFull(int capacity) {
@@ -55,8 +56,11 @@ public class ParkingLot {
         if (isAlreadyParked(object)) {
             vehicles.remove(object);
 
-            if (isFull(capacity - 1)) { // TODO - conditions can be extracted and named. CMD + OPTION + M
-                owner.isNotifySpaceAvailable();
+            for (int i = 0; i < observers.size(); i++) {
+                ParkingLotAuthority observer = observers.get(i);
+                if (isFull(capacity - 1)) {
+                    observer.isNotifySpaceAvailable();
+                }
             }
             return object;
         }
