@@ -250,6 +250,41 @@ public class ParkingLotTest {
             assertEquals(0,securityGuardTwo.isParkingLotFullCount);
         }
 
+        @Test
+        void givenParkingLotFullOrSpaceAvailable_WhenNotify_ThenShouldNotifyToOnlySubscribedUsersMutiple() throws ParkingLotFullException, ParkingLotSameCarException, ParkingLotUnParkException {
+            List<ParkingLotAuthority> subscribers = new ArrayList<>();
+            DummyOwner owner = new DummyOwner();
+            SecurityGuard securityGuardOne = new SecurityGuard();
+            SecurityGuard securityGuardTwo = new SecurityGuard();
+            SecurityGuard securityGuardThree = new SecurityGuard();
 
+            subscribers.add(owner);
+            subscribers.add(securityGuardOne);
+            subscribers.add(securityGuardTwo);
+            subscribers.remove(securityGuardTwo);
+            subscribers.add(securityGuardThree);
+
+            ParkingLot parkingLot = new ParkingLot(2, subscribers);
+
+            Object vehicleOne = new Object();
+            Object vehicleTwo = new Object();
+
+            parkingLot.park(vehicleOne);
+            parkingLot.park(vehicleTwo);
+            parkingLot.unPark(vehicleOne);
+            parkingLot.park(vehicleOne);
+
+            assertEquals(2, securityGuardOne.isParkingLotFullCount);
+            assertEquals(1, securityGuardOne.isSpaceAvailableCount);
+
+            assertEquals(2, owner.isParkingLotFullCount);
+            assertEquals(1, owner.isSpaceAvailableCount);
+
+            assertEquals(0,securityGuardTwo.isSpaceAvailableCount);
+            assertEquals(0,securityGuardTwo.isParkingLotFullCount);
+
+            assertEquals(2, securityGuardThree.isParkingLotFullCount);
+            assertEquals(1, securityGuardThree.isSpaceAvailableCount);
+        }
     }
 }

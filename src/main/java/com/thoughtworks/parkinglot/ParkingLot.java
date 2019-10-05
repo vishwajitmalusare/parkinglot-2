@@ -1,6 +1,5 @@
 package com.thoughtworks.parkinglot;
 
-import com.thoughtworks.ParkingLotFullException;
 import com.thoughtworks.ParkingLotSameCarException;
 import com.thoughtworks.ParkingLotUnParkException;
 
@@ -18,30 +17,51 @@ public class ParkingLot {
         this.observers = observer;
     }
 
-    public void park(Object object) throws ParkingLotSameCarException, ParkingLotFullException {
-
-        if (isAlreadyParked(object)) {
+    public void park(Object object) throws ParkingLotSameCarException {
+        if (isFull()) {
             throw new ParkingLotSameCarException();
         }
-
-        if (isFull(capacity)) {
-            throw new ParkingLotFullException();
+        if (isAlreadyPark(object)) {
+            throw new ParkingLotSameCarException();
         }
         vehicles.add(object);
-        for (int i = 0; i < observers.size(); i++) {
-            ParkingLotAuthority observer = observers.get(i);
-            if (isFull(capacity)) {
+        notifySubscriberIsFull();
+    }
+
+    public Object unPark(Object object) throws ParkingLotUnParkException {
+        if (isAlreadyPark(object)) {
+            vehicles.remove(object);
+
+            notifySubscriberSpaceAvailable();
+            return object;
+        }
+        throw new ParkingLotUnParkException();
+    }
+
+
+    private void notifySubscriberSpaceAvailable() {
+        for (ParkingLotAuthority observer : observers) {
+            if (vehicles.size() == capacity - 1) {
+                observer.isNotifySpaceAvailable();
+            }
+        }
+    }
+
+
+    private void notifySubscriberIsFull() {
+        for (ParkingLotAuthority observer : observers) {
+            if (isFull()) {
                 observer.isNotifyParkingLotFull();
             }
         }
     }
 
-    private boolean isFull(int capacity) {
-        return vehicles.size() == capacity;
+    private boolean isAlreadyPark(Object object) {
+        return vehicles.contains(object);
     }
 
-    private boolean isAlreadyParked(Object object) {
-        return vehicles.contains(object);
+    private boolean isFull() {
+        return vehicles.size() == capacity;
     }
 
 
@@ -52,18 +72,4 @@ public class ParkingLot {
                 '}';
     }
 
-    public Object unPark(Object object) throws ParkingLotUnParkException {
-        if (isAlreadyParked(object)) {
-            vehicles.remove(object);
-
-            for (int i = 0; i < observers.size(); i++) {
-                ParkingLotAuthority observer = observers.get(i);
-                if (isFull(capacity - 1)) {
-                    observer.isNotifySpaceAvailable();
-                }
-            }
-            return object;
-        }
-        throw new ParkingLotUnParkException();
-    }
 }

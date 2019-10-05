@@ -1,6 +1,5 @@
 package com.thoughtworks.consumer;
 
-import com.thoughtworks.ParkingLotFullException;
 import com.thoughtworks.ParkingLotSameCarException;
 import com.thoughtworks.parkinglot.ParkingLot;
 import com.thoughtworks.parkinglot.ParkingLotAuthority;
@@ -18,7 +17,7 @@ public class SanjayScenarioOne {
             parkingLotOne.park(carOne);
             parkingLotOne.park(carTwo);
             parkingLotTwo.park(carThree);
-        } catch (ParkingLotSameCarException | ParkingLotFullException e) {
+        } catch (ParkingLotSameCarException e) {
             System.out.println(e);
         }
     }
