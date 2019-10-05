@@ -2,7 +2,7 @@ package com.thoughtworks.parkinglot;
 
 import com.thoughtworks.ParkingLotFullException;
 import com.thoughtworks.ParkingLotSameCarException;
-import com.thoughtworks.ParkingLotVehicleNotParkException;
+import com.thoughtworks.ParkingLotUnParkException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,30 +10,29 @@ import java.util.List;
 public class ParkingLot {
 
     private int capacity;
-    private int spaceAvailable;
     private Owner owner;
     List<Object> vehicles = new ArrayList<>();
 
-    public ParkingLot(int capacity, Owner owner) {
+    public ParkingLot(int capacity, Owner owner) { // TODO - owner is mandatory so null checks should not be required.
         this.capacity = capacity;
-        this.spaceAvailable = capacity;
         this.owner = owner;
     }
 
     public boolean park(Object object) throws ParkingLotSameCarException, ParkingLotFullException {
 
-        if (spaceAvailable > 0) {
+        if (capacity > 0) {
+
             if (vehicles.contains(object)) {
-                throw new ParkingLotSameCarException("You cannot park same vehicle");
+                throw new ParkingLotSameCarException();
             }
+
             vehicles.add(object);
             if (vehicles.size() == capacity) {
-                owner.isNotify();
+                owner.isNotifyParkingLotFull();
             }
-            spaceAvailable--;
             return true;
         }
-        throw new ParkingLotFullException("parking lot is full");
+        throw new ParkingLotFullException();
     }
 
 
@@ -44,11 +43,15 @@ public class ParkingLot {
                 '}';
     }
 
-    public Object unPark(Object object) throws ParkingLotVehicleNotParkException {
+    public Object unPark(Object object) throws ParkingLotUnParkException {
         if (vehicles.contains(object)) {
             vehicles.remove(object);
+
+            if (vehicles.size() == capacity - 1) { // TODO - conditions can be extracted and named. CMD + OPTION + M
+                owner.isNotifySpaceAvailable();
+            }
             return object;
         }
-        throw new ParkingLotVehicleNotParkException("Vehicle not parked, unable to un-park");
+        throw new ParkingLotUnParkException();
     }
 }
