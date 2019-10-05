@@ -2,6 +2,7 @@ package com.thoughtworks.consumer;
 
 import com.thoughtworks.ParkingLotFullException;
 import com.thoughtworks.ParkingLotSameCarException;
+import com.thoughtworks.parkinglot.Owner;
 import com.thoughtworks.parkinglot.ParkingLot;
 
 public class SanjayScenarioTwo{
@@ -19,6 +20,7 @@ public class SanjayScenarioTwo{
 
     public static void main(String[] args) {
         SanjayScenarioTwo sanjayScenarioTwo = new SanjayScenarioTwo();
-        sanjayScenarioTwo.park(new ParkingLot(2), new ParkingLot(3));
+        Owner owner = new Owner();
+        sanjayScenarioTwo.park(new ParkingLot(2,owner), new ParkingLot(3,owner));
     }
 }
