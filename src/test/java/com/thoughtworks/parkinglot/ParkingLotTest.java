@@ -51,16 +51,16 @@ public class ParkingLotTest {
 
     @Test
     void givenParkingLotHasCapacity_WhenPark_ThenShouldPark() {
-        List<ParkingLotAuthority> observers = new ArrayList<>();
-        ParkingLot parkingLot = new ParkingLot(1, observers);
+        List<ParkingLotAuthority> subscribers = new ArrayList<>();
+        ParkingLot parkingLot = new ParkingLot(1, subscribers);
         assertDoesNotThrow(() -> parkingLot.park(new Object()));
     }
 
     @Test
     void givenParkingLotIsFull_WhenPark_ThenShouldNotPark() throws ParkingLotSameCarException, ParkingLotFullException {
-        List<ParkingLotAuthority> observers = new ArrayList<>();
+        List<ParkingLotAuthority> subscribers = new ArrayList<>();
 
-        ParkingLot parkingLot = new ParkingLot(2, observers);
+        ParkingLot parkingLot = new ParkingLot(2, subscribers);
         Object object = new Object();
         parkingLot.park(object);
 
@@ -71,9 +71,9 @@ public class ParkingLotTest {
 
     @Test
     void givenParkingSameObject_WhenPark_ThenShouldNotPark() throws ParkingLotSameCarException, ParkingLotFullException {
-        List<ParkingLotAuthority> observers = new ArrayList<>();
+        List<ParkingLotAuthority> subscribers = new ArrayList<>();
 
-        ParkingLot parkingLot = new ParkingLot(2, observers);
+        ParkingLot parkingLot = new ParkingLot(2, subscribers);
 
         Object object = new Object();
         parkingLot.park(object);
@@ -87,9 +87,9 @@ public class ParkingLotTest {
     class UnParkTest {
         @Test
         void givenParkingLotHasVehical_WhenUnparkAParkVehicle_thenShouldBeAbleToUnPark() throws ParkingLotUnParkException, ParkingLotFullException, ParkingLotSameCarException {
-            List<ParkingLotAuthority> observers = new ArrayList<>();
+            List<ParkingLotAuthority> subscribers = new ArrayList<>();
 
-            ParkingLot parkingLot = new ParkingLot(2, observers);
+            ParkingLot parkingLot = new ParkingLot(2, subscribers);
             Object vehicleOne = new Object();
             parkingLot.park(vehicleOne);
             assertEquals(vehicleOne, parkingLot.unPark(vehicleOne));
@@ -98,8 +98,8 @@ public class ParkingLotTest {
 
         @Test
         void givenParkingLotIsEmpty_WhenUnPark_thenShouldNotBeAbleToUnPark() {
-            List<ParkingLotAuthority> observers = new ArrayList<>();
-            ParkingLot parkingLot = new ParkingLot(0, observers);
+            List<ParkingLotAuthority> subscribes = new ArrayList<>();
+            ParkingLot parkingLot = new ParkingLot(0, subscribes);
             Object vehicle = new Object();
 
             assertThrows(ParkingLotUnParkException.class, () -> {
@@ -110,8 +110,8 @@ public class ParkingLotTest {
 
         @Test
         void givenParkingLotIsFull_WhenUnPark_thenShouldNotBeAbleToUnPark() throws ParkingLotFullException, ParkingLotSameCarException {
-            List<ParkingLotAuthority> observers = new ArrayList<>();
-            ParkingLot parkingLot = new ParkingLot(2, observers);
+            List<ParkingLotAuthority> subscribers = new ArrayList<>();
+            ParkingLot parkingLot = new ParkingLot(2, subscribers);
             Object vehicleOne = new Object();
             Object vehicleTWo = new Object();
             Object vehicleThree = new Object();
@@ -126,10 +126,10 @@ public class ParkingLotTest {
 
         @Test
         void givenParkingLotIsFull_whenNotify_thenShouldNotifyOwner() throws ParkingLotFullException, ParkingLotSameCarException, ParkingLotUnParkException {
-            List<ParkingLotAuthority> observers = new ArrayList<>();
+            List<ParkingLotAuthority> subscribes = new ArrayList<>();
             DummyOwner owner = new DummyOwner();
-            observers.add(owner);
-            ParkingLot parkingLot = new ParkingLot(2, observers);
+            subscribes.add(owner);
+            ParkingLot parkingLot = new ParkingLot(2, subscribes);
             Object vehicleOne = new Object();
             Object vehicleTwo = new Object();
             Object vehicleThree = new Object();
@@ -144,11 +144,11 @@ public class ParkingLotTest {
 
         @Test
         void givenParkingLotHasAvailableSpaceWhenNotifyThenShouldNotifySpaceAvailable() throws ParkingLotFullException, ParkingLotSameCarException, ParkingLotUnParkException {
-            List<ParkingLotAuthority> observers = new ArrayList<>();
+            List<ParkingLotAuthority> subscribers = new ArrayList<>();
             DummyOwner owner =new DummyOwner();
-            observers.add(owner);
+            subscribers.add(owner);
 
-            ParkingLot parkingLot = new ParkingLot(4, observers);
+            ParkingLot parkingLot = new ParkingLot(4, subscribers);
             Object vehicleOne = new Object();
             Object vehicleTwo = new Object();
             Object vehicleThree = new Object();
@@ -174,10 +174,10 @@ public class ParkingLotTest {
 
         @Test
         void givenParkingLotIsFullOrSpaceAvailable_WhenNotify_ThenShouldNotifySecurityGuard() throws ParkingLotFullException, ParkingLotSameCarException, ParkingLotUnParkException {
-            List<ParkingLotAuthority> observers = new ArrayList<>();
+            List<ParkingLotAuthority> subscribers = new ArrayList<>();
             SecurityGuard securityGuard =new SecurityGuard();
-            observers.add(securityGuard);
-            ParkingLot parkingLot = new ParkingLot(3, observers);
+            subscribers.add(securityGuard);
+            ParkingLot parkingLot = new ParkingLot(3, subscribers);
             Object vehicleOne = new Object();
             Object vehicleTwo = new Object();
             Object vehicleThree = new Object();
@@ -196,12 +196,13 @@ public class ParkingLotTest {
 
         @Test
         void givenParkingLotFullOrSpaceAvailable_WhenNotify_ThenShouldNotifyAllSubscriber() throws ParkingLotFullException, ParkingLotSameCarException, ParkingLotUnParkException {
-            List<ParkingLotAuthority> observers = new ArrayList<>();
+            List<ParkingLotAuthority> subscribers = new ArrayList<>();
             DummyOwner owner = new DummyOwner();
-            SecurityGuard securityGuard = new SecurityGuard();
-            observers.add(owner);
-            observers.add(securityGuard);
-            ParkingLot parkingLot = new ParkingLot(2, observers);
+            SecurityGuard securityGuardOne = new SecurityGuard();
+
+            subscribers.add(owner);
+            subscribers.add(securityGuardOne);
+            ParkingLot parkingLot = new ParkingLot(2, subscribers);
 
             Object vehicleOne = new Object();
             Object vehicleTwo = new Object();
@@ -211,13 +212,44 @@ public class ParkingLotTest {
             parkingLot.unPark(vehicleOne);
             parkingLot.park(vehicleOne);
 
-            assertEquals(2, securityGuard.isParkingLotFullCount);
-            assertEquals(1, securityGuard.isSpaceAvailableCount);
+            assertEquals(2, securityGuardOne.isParkingLotFullCount);
+            assertEquals(1, securityGuardOne.isSpaceAvailableCount);
 
             assertEquals(2, owner.isParkingLotFullCount);
             assertEquals(1, owner.isSpaceAvailableCount);
         }
 
-    }
+        @Test
+        void givenParkingLotFullOrSpaceAvailable_WhenNotify_ThenShouldNotifyToOnlySubscribedUsers() throws ParkingLotFullException, ParkingLotSameCarException, ParkingLotUnParkException {
+            List<ParkingLotAuthority> subscribers = new ArrayList<>();
+            DummyOwner owner = new DummyOwner();
+            SecurityGuard securityGuardOne = new SecurityGuard();
+            SecurityGuard securityGuardTwo = new SecurityGuard();
 
+            subscribers.add(owner);
+            subscribers.add(securityGuardOne);
+            subscribers.add(securityGuardTwo);
+            subscribers.remove(securityGuardTwo);
+            ParkingLot parkingLot = new ParkingLot(2, subscribers);
+
+            Object vehicleOne = new Object();
+            Object vehicleTwo = new Object();
+
+            parkingLot.park(vehicleOne);
+            parkingLot.park(vehicleTwo);
+            parkingLot.unPark(vehicleOne);
+            parkingLot.park(vehicleOne);
+
+            assertEquals(2, securityGuardOne.isParkingLotFullCount);
+            assertEquals(1, securityGuardOne.isSpaceAvailableCount);
+
+            assertEquals(2, owner.isParkingLotFullCount);
+            assertEquals(1, owner.isSpaceAvailableCount);
+
+            assertEquals(0,securityGuardTwo.isSpaceAvailableCount);
+            assertEquals(0,securityGuardTwo.isParkingLotFullCount);
+        }
+
+
+    }
 }
