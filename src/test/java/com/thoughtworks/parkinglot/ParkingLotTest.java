@@ -9,29 +9,32 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ParkingLotTest {
+class DummyOwner implements ParkingLotAuthority {
+    boolean checked = false;
+    boolean spaceAvilable = false;
+    int isParkingLotFullCount = 0;
+    int isSpaceAvailableCount = 0;
 
-    class DummyOwner Owner {
-        boolean checked = false;
-        boolean spaceAvilable = false;
-        int isParkingLotFullCount = 0;
-        int isSpaceAvailableCount =0;
-
-        public void isNotifyParkingLotFull() {
-            checked = true;
-            isParkingLotFullCount++;
-        }
-        public void isNotifySpaceAvailable() {
-            spaceAvilable = true;
-            isSpaceAvailableCount ++;
-        }
-
+    public void isNotifyParkingLotFull() {
+        checked = true;
+        isParkingLotFullCount++;
     }
 
-    DummyOwner owner = new DummyOwner();
+    public void isNotifySpaceAvailable() {
+        spaceAvilable = true;
+        isSpaceAvailableCount++;
+    }
+
+}
+
+public class ParkingLotTest {
+
+
+    //DummyOwner owner = new DummyOwner();
 
     @Test
     void givenParkingLotHasCapacity_WhenPark_ThenShouldPark() throws ParkingLotSameCarException, ParkingLotFullException {
+        DummyOwner owner = new DummyOwner();
         ParkingLot parkingLot = new ParkingLot(1, owner);
         //assertDoesNotThrow(()-> parkingLot.park(new Object()));
         assertTrue(parkingLot.park(new Object()));
@@ -39,6 +42,8 @@ public class ParkingLotTest {
 
     @Test
     void givenParkingLotIsFull_WhenPark_ThenShouldNotPark() throws ParkingLotSameCarException, ParkingLotFullException {
+        DummyOwner owner = new DummyOwner();
+
         ParkingLot parkingLot = new ParkingLot(2, owner);
         Object object = new Object();
         parkingLot.park(object);
@@ -50,6 +55,8 @@ public class ParkingLotTest {
 
     @Test
     void givenParkingSameObject_WhenPark_ThenShouldNotPark() throws ParkingLotSameCarException, ParkingLotFullException {
+        DummyOwner owner = new DummyOwner();
+
         ParkingLot parkingLot = new ParkingLot(2, owner);
 
         Object object = new Object();
@@ -64,6 +71,8 @@ public class ParkingLotTest {
     class UnParkTest {
         @Test
         void givenParkingLotHasVehical_WhenUnparkAParkVehicle_thenShouldBeAbleToUnPark() throws ParkingLotUnParkException, ParkingLotFullException, ParkingLotSameCarException {
+            DummyOwner owner = new DummyOwner();
+
             ParkingLot parkingLot = new ParkingLot(2, owner);
             Object vehicleOne = new Object();
             parkingLot.park(vehicleOne);
@@ -73,10 +82,11 @@ public class ParkingLotTest {
 
         @Test
         void givenParkingLotIsEmpty_WhenUnPark_thenShouldNotBeAbleToUnPark() {
+            DummyOwner owner = new DummyOwner();
             ParkingLot parkingLot = new ParkingLot(0, owner);
             Object vehicle = new Object();
 
-             assertThrows(ParkingLotUnParkException.class, () -> {
+            assertThrows(ParkingLotUnParkException.class, () -> {
                 parkingLot.unPark(vehicle);
             });
 
@@ -84,6 +94,7 @@ public class ParkingLotTest {
 
         @Test
         void givenParkingLotIsFull_WhenUnPark_thenShouldNotBeAbleToUnPark() throws ParkingLotFullException, ParkingLotSameCarException {
+            DummyOwner owner = new DummyOwner();
             ParkingLot parkingLot = new ParkingLot(2, owner);
             Object vehicleOne = new Object();
             Object vehicleTWo = new Object();
@@ -91,7 +102,7 @@ public class ParkingLotTest {
 
             parkingLot.park(vehicleOne);
             parkingLot.park(vehicleTWo);
-             assertThrows(ParkingLotUnParkException.class, () -> {
+            assertThrows(ParkingLotUnParkException.class, () -> {
                 parkingLot.unPark(vehicleThree);
             });
 
@@ -99,8 +110,8 @@ public class ParkingLotTest {
 
         @Test
         void givenParkingLotIsFull_whenNotify_thenShouldNotifyOwner() throws ParkingLotFullException, ParkingLotSameCarException, ParkingLotUnParkException {
-            DummyOwner ownerOne = new DummyOwner();
-            ParkingLot parkingLot = new ParkingLot(2, ownerOne);
+            DummyOwner owner = new DummyOwner();
+            ParkingLot parkingLot = new ParkingLot(2, owner);
             Object vehicleOne = new Object();
             Object vehicleTwo = new Object();
             Object vehicleThree = new Object();
@@ -110,13 +121,13 @@ public class ParkingLotTest {
             parkingLot.unPark(vehicleOne);
             parkingLot.park(vehicleThree);
 
-            assertEquals(2, ownerOne.isParkingLotFullCount);
+            assertEquals(2, owner.isParkingLotFullCount);
         }
 
         @Test
         void givenParkingLotHasAvailableSpaceWhenNotifyThenShouldNotifySpaceAvailable() throws ParkingLotFullException, ParkingLotSameCarException, ParkingLotUnParkException {
-            DummyOwner ownerTwo = new DummyOwner();
-            ParkingLot parkingLot = new ParkingLot(4,ownerTwo);
+            DummyOwner owner = new DummyOwner();
+            ParkingLot parkingLot = new ParkingLot(4, owner);
             Object vehicleOne = new Object();
             Object vehicleTwo = new Object();
             Object vehicleThree = new Object();
@@ -136,8 +147,8 @@ public class ParkingLotTest {
             parkingLot.unPark(vehicleThree);
 
 
-            assertEquals(2,ownerTwo.isParkingLotFullCount);
-            assertEquals(2,ownerTwo.isSpaceAvailableCount);
+            assertEquals(2, owner.isParkingLotFullCount);
+            assertEquals(2, owner.isSpaceAvailableCount);
         }
 
     }

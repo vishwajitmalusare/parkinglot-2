@@ -4,7 +4,7 @@ import com.thoughtworks.ParkingLotFullException;
 import com.thoughtworks.ParkingLotSameCarException;
 import com.thoughtworks.parkinglot.*;
 
-public class SanjayScenerioOne{
+public class SanjayScenerioOne {
     public void park(ParkingLot parkingLotOne, ParkingLot parkingLotTwo) {
         Object carOne = new Object();
         Object carTwo = new Object();
@@ -21,7 +21,7 @@ public class SanjayScenerioOne{
 
     public static void main(String[] args) {
         SanjayScenerioOne sanjayScenerioOne = new SanjayScenerioOne();
-        Owner owner = new Owner();
-        sanjayScenerioOne.park(new ParkingLot(2,owner), new ParkingLot(3,owner));
+        ParkingLotAuthority owner = null;
+        sanjayScenerioOne.park(new ParkingLot(2, owner), new ParkingLot(3, owner));
     }
 }

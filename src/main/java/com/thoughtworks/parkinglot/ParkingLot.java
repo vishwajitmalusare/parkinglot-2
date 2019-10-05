@@ -10,10 +10,10 @@ import java.util.List;
 public class ParkingLot {
 
     private int capacity;
-    private Owner owner;
+    private ParkingLotAuthority owner;
     List<Object> vehicles = new ArrayList<>();
 
-    public ParkingLot(int capacity, Owner owner) { // TODO - owner is mandatory so null checks should not be required.
+    public ParkingLot(int capacity, ParkingLotAuthority owner) { // TODO - owner is mandatory so null checks should not be required.
         this.capacity = capacity;
         this.owner = owner;
     }
@@ -22,17 +22,25 @@ public class ParkingLot {
 
         if (capacity > 0) {
 
-            if (vehicles.contains(object)) {
+            if (isAlreadyParked(object)) {
                 throw new ParkingLotSameCarException();
             }
 
             vehicles.add(object);
-            if (vehicles.size() == capacity) {
+            if (isFull(capacity)) {
                 owner.isNotifyParkingLotFull();
             }
             return true;
         }
         throw new ParkingLotFullException();
+    }
+
+    private boolean isFull(int capacity) {
+        return vehicles.size() == capacity;
+    }
+
+    private boolean isAlreadyParked(Object object) {
+        return vehicles.contains(object);
     }
 
 
@@ -44,10 +52,10 @@ public class ParkingLot {
     }
 
     public Object unPark(Object object) throws ParkingLotUnParkException {
-        if (vehicles.contains(object)) {
+        if (isAlreadyParked(object)) {
             vehicles.remove(object);
 
-            if (vehicles.size() == capacity - 1) { // TODO - conditions can be extracted and named. CMD + OPTION + M
+            if (isFull(capacity - 1)) { // TODO - conditions can be extracted and named. CMD + OPTION + M
                 owner.isNotifySpaceAvailable();
             }
             return object;
